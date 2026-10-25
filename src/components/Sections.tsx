@@ -38,7 +38,7 @@ function Head({ label, title, intro, id, center = false }: { label: string; titl
 
 /* ================= hero ================= */
 
-export function Hero({ resume, isExample, onUpload }: { resume: Resume; isExample: boolean; onUpload: () => void }) {
+export function Hero({ resume }: { resume: Resume }) {
   const [role, focus] = splitHeadline(resume.headline);
   const words = resume.name.split(/\s+/);
   const first = words.length > 1 ? words.slice(0, -1).join(' ') : words[0];
@@ -60,15 +60,9 @@ export function Hero({ resume, isExample, onUpload }: { resume: Resume; isExampl
           <span className="hero__bar" aria-hidden />
           <p className="hero__intro">{resume.summary ? resume.summary.split(/(?<=[.!?])\s/)[0] : resume.tagline}</p>
           <div className="hero__actions">
-            {isExample ? (
-              <button className="pill pill--sm hero__btn" onClick={onUpload}>
-                Upload your CV <Icon name="arrowRight" size={14} />
-              </button>
-            ) : (
-              <a className="pill pill--sm hero__btn" href={resume.email ? `mailto:${resume.email}` : '#contact'}>
-                Get in touch <Icon name="arrowRight" size={14} />
-              </a>
-            )}
+            <a className="pill pill--sm hero__btn" href={resume.email ? `mailto:${resume.email}` : '#contact'}>
+              Get in touch <Icon name="arrowRight" size={14} />
+            </a>
             <a className="pill pill--sm pill--ghost hero__btn" href="#skills">
               Explore skills <Icon name="arrowRight" size={14} />
             </a>
@@ -218,7 +212,7 @@ export function ProjectsSection({ resume }: { resume: Resume }) {
           Better Outcomes
         </h2>
         <p className="tech__desc" key={open} data-search>
-          {p ? p.description || p.meta : 'Add projects to the CV to show them here.'}
+          {p ? p.description || p.meta : 'Add projects to src/data/profile.ts to show them here.'}
         </p>
         <ul className="tech__list" role="tablist" aria-label="Projects">
           {projects.map((x, i) => (
@@ -260,7 +254,7 @@ function Count({ icon, value, suffix = '', label, run, delay }: { icon: IconName
   );
 }
 
-export function AboutSection({ resume, isExample, onDownloadCv }: { resume: Resume; isExample: boolean; onDownloadCv: () => void }) {
+export function AboutSection({ resume }: { resume: Resume }) {
   const [ref, inView] = useInView<HTMLUListElement>(0.4);
   const [role, focus] = splitHeadline(resume.headline);
   const { stats } = resume;
@@ -280,9 +274,15 @@ export function AboutSection({ resume, isExample, onDownloadCv }: { resume: Resu
           <Count icon="activity" value={stats.skills} suffix="+" label="Core skills" run={inView} delay={300} />
           <Count icon="shield" value={resume.certifications.length + resume.achievements.length} label="Awards & certs" run={inView} delay={450} />
         </ul>
-        <button className="pill pill--sm pill--ghost" onClick={onDownloadCv}>
-          {isExample ? 'Download sample CV' : 'Download CV'} <Icon name="download" size={14} />
-        </button>
+        {resume.cvUrl ? (
+          <a className="pill pill--sm pill--ghost" href={resume.cvUrl} download>
+            Download CV <Icon name="download" size={14} />
+          </a>
+        ) : (
+          <a className="pill pill--sm pill--ghost" href="#contact">
+            Get in touch <Icon name="arrowRight" size={14} />
+          </a>
+        )}
       </div>
       <div className="about__photo" aria-hidden>
         <img src={reception} alt="" loading="lazy" />
@@ -329,7 +329,7 @@ export function ExperienceSection({ resume }: { resume: Resume }) {
               </GlowCard>
             </Reveal>
           ))}
-          {!roles.length && <p className="empty">No experience section was found in the CV.</p>}
+          {!roles.length && <p className="empty">Add roles to src/data/profile.ts to show them here.</p>}
         </div>
         {r && r.bullets.length > 0 && (
           <ul className="role-detail" key={active} data-search>
@@ -394,7 +394,7 @@ export function ResultsSection({ resume }: { resume: Resume }) {
               <Icon name="chevronRight" size={16} />
             </button>
           )}
-          {!items.length && <p className="empty">Add Achievements or Certifications to the CV to show them here.</p>}
+          {!items.length && <p className="empty">Add achievements or certifications to src/data/profile.ts to show them here.</p>}
         </div>
       </div>
     </section>
@@ -534,7 +534,7 @@ export function Footer({ resume }: { resume: Resume }) {
       </div>
       <div className="wrap footer__base">
         <span>
-          © {new Date().getFullYear()} {resume.name}. Built from a CV.
+          © {new Date().getFullYear()} {resume.name}
         </span>
         <a href="#home">Back to top ↑</a>
       </div>

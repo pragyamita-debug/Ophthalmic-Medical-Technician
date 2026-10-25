@@ -1,4 +1,4 @@
-/** An eye with a lit iris inside a soft ring — the brand mark in the nav, footer and upload screen. */
+/** An eye with a lit iris inside a soft ring — the brand mark in the nav and footer. */
 export function Logo({ size = 38 }: { size?: number; light?: boolean }) {
   return (
     <svg className="logo" width={size} height={size} viewBox="0 0 40 40" aria-hidden>

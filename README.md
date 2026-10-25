@@ -1,29 +1,34 @@
-# CV → Dashboard (Ophthalmic Medical Technician)
+# Ophthalmic Medical Technician Portfolio Dashboard
 
-Candidates upload a CV (PDF, DOCX or TXT) and get an animated portfolio dashboard in a night-blue clinic
-style: deep navy, electric-blue light, glass cards, a drifting network of light points behind the hero, real
+An animated portfolio dashboard in a night-blue clinic style: deep navy, electric-blue light, glass cards, a drifting network of light points behind the hero, real
 clinician / imaging-suite / reception photos, and a warm sunrise on the horizon of the contact band.
 
-Everything runs in the browser. The CV is read client-side and never sent to a server.
+All the content lives in one file, `src/data/profile.ts`. It ships with neutral placeholder text
+(“Your Name”, “Your Role”, “Project One”…) — replace the values and the whole page updates.
 
 **Live site:** https://pragyamita-debug.github.io/Ophthalmic-Medical-Technician/ (after Pages is switched on — see below)
 
-## How it works
+## Making it yours
 
-0. **Example first** — the page opens on the full design filled with neutral placeholder text
-   (`src/data/placeholder.ts`: “Your Name”, “Your Role”, “Project One”…) and an **Upload CV** button.
-1. **Upload** — drag a CV onto the drop zone, or try the bundled sample (`src/data/sample-cv.txt`, a fictional ophthalmic technician).
-2. **Read** — PDF text comes from pdf.js, Word files from mammoth; both load only when needed.
-3. **Parse** — `src/lib/parseResume.ts` splits the text into sections and works out years of experience from
-   the date ranges, counting overlapping jobs once. `Tools: …` lines under a project become its tags.
-4. **Review** — the candidate checks what was found and fixes anything before the dashboard is built.
-5. **Dashboard** — saved to `localStorage`; the profile menu (top right) can upload another CV, edit, download or go back to the example.
+Open `src/data/profile.ts` and edit the fields:
+
+| Field | Shown in |
+| --- | --- |
+| `name`, `headline` (`Role | Focus`), `location`, `email`, `phone`, `links` | top bar, hero, reception wall, contact, footer |
+| `summary`, `tagline`, `motto` | hero, skills intro, about, footer |
+| `skills`, `interests`, `certifications` | hero chips, skill cards |
+| `projects` (with `tags`) | projects |
+| `experience` | experience cards |
+| `achievements`, `certifications` | achievement cards, counters |
+| `goals` | bell, hero card, contact band, footer |
+| `stats` | the counting numbers |
+| `cvUrl` (optional) | adds a **Download CV** button — put the file in `public/` |
 
 ## What the dashboard shows
 
 | Section | Built from |
 | --- | --- |
-| Top bar | eye mark, name and role, section links, expanding search (Enter jumps to and highlights the match), bell with the goals, profile menu, **Upload CV** / **Get in touch** |
+| Top bar | eye mark, name and role, section links, expanding search (Enter jumps to and highlights the match), bell with the goals, **Get in touch** |
 | Hero | focus, name, role in blue, first line of the summary, three top skills; clinician photo with a scan line and a floating “next step” card |
 | Skills | six glowing skill cards (all on request) |
 | Projects | imaging-suite photo with a breathing glow; pick a project to read it |
@@ -51,7 +56,7 @@ All motion respects `prefers-reduced-motion`.
 ```bash
 npm install
 npm run dev          # local dev server
-npm test             # parser tests (vitest)
+npm run typecheck    # TypeScript check
 npm run build        # static build in dist/
 npm run build:single # one self-contained index.html in dist-single/
 ```
@@ -61,27 +66,18 @@ npm run build:single # one self-contained index.html in dist-single/
 1. **Settings → Pages → Build and deployment → Source:** choose **GitHub Actions**.
 2. **Actions → Deploy to GitHub Pages → Run workflow** (it also runs on every push to `main`).
 
-## Writing a CV that parses well
-
-- Clear headings: **Experience**, **Education**, **Skills**, **Projects**, **Achievements**, **Certifications**.
-- Dates on the role line or the line after it: `Jan 2023 – Present`, `03/2021 - 06/2023`, `2019 - 2022`.
-- Optional extras: **Goals** (`Goal: …`, `Next Step: …`), **Motto**, **Interests**.
-- Text-based PDFs only — scanned images have no text to read.
-
 ## Project structure
 
 ```
 src/
-  App.tsx                 example → upload → reading → review → dashboard
-  data/placeholder.ts     the general example profile shown before any upload
-  data/sample-cv.txt      fictional sample CV
-  lib/                    extractText, parseResume (+ tests), dates, storage, types
+  App.tsx                 renders the dashboard from the profile
+  data/profile.ts         all the content (edit this)
+  lib/types.ts            the profile shape
   hooks/                  useCountUp, useScramble, useInView, usePointerGlow, useScrollSpy
   components/
-    NavBar.tsx            top bar, search, bell, profile menu
+    NavBar.tsx            top bar, search, bell
     Sections.tsx          hero, skills, projects, about, experience, achievements, contact band, footer
     Dashboard.tsx         page layout
-    UploadScreen.tsx, ReviewDialog.tsx
     GlowCard.tsx          the moving-border card
   assets/photos/          hero, imaging suite, reception
   styles/global.css       colour tokens, type, buttons

@@ -1,22 +1,12 @@
 import { useScrollSpy } from '../hooks/useScrollSpy';
-import type { StoredProfile } from '../lib/types';
+import type { Resume } from '../lib/types';
 import { NAV, NavBar } from './NavBar';
 import { AboutSection, ContactBand, ExperienceSection, Footer, Hero, ProjectsSection, ResultsSection, SkillsSection, splitHeadline } from './Sections';
 import './Dashboard.css';
 
 const IDS = NAV.map((n) => n.id);
 
-interface Props {
-  profile: StoredProfile;
-  isExample: boolean;
-  onUploadNew: () => void;
-  onEdit: () => void;
-  onReset: () => void;
-  onDownloadCv: () => void;
-}
-
-export function Dashboard({ profile, isExample, onUploadNew, onEdit, onReset, onDownloadCv }: Props) {
-  const { resume } = profile;
+export function Dashboard({ resume }: { resume: Resume }) {
   const active = useScrollSpy(IDS, 140);
   const [role] = splitHeadline(resume.headline);
 
@@ -28,17 +18,12 @@ export function Dashboard({ profile, isExample, onUploadNew, onEdit, onReset, on
         email={resume.email}
         goals={resume.goals}
         active={active}
-        isExample={isExample}
-        onUploadNew={onUploadNew}
-        onEdit={onEdit}
-        onDownloadCv={onDownloadCv}
-        onReset={onReset}
       />
       <main>
-        <Hero resume={resume} isExample={isExample} onUpload={onUploadNew} />
+        <Hero resume={resume} />
         <SkillsSection resume={resume} />
         <ProjectsSection resume={resume} />
-        <AboutSection resume={resume} isExample={isExample} onDownloadCv={onDownloadCv} />
+        <AboutSection resume={resume} />
         <ExperienceSection resume={resume} />
         <ResultsSection resume={resume} />
         <ContactBand resume={resume} />

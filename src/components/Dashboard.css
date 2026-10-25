@@ -26,8 +26,6 @@ body { background: radial-gradient(1200px 700px at 70% -10%, #0c2152 0%, transpa
 .nav__bell:hover svg { animation: ring-bell 0.6s; }
 @keyframes ring-bell { 20%, 60% { rotate: 14deg; } 40%, 80% { rotate: -12deg; } }
 .nav__dot { position: absolute; top: 8px; right: 9px; width: 7px; height: 7px; border-radius: 50%; background: var(--warm); box-shadow: 0 0 0 2px var(--bg); }
-.nav__avatar { display: grid; place-items: center; width: 36px; height: 36px; margin: 0 6px; border: 1px solid var(--line-strong); border-radius: 50%; background: var(--surface-2); color: var(--text); transition: box-shadow 0.25s; }
-.nav__avatar:hover { box-shadow: 0 0 0 4px var(--hover-tint); }
 .nav__cta { height: 36px; border-radius: 6px; }
 .nav .nav__burger { display: none; }
 .nav__search { display: flex; align-items: center; gap: 4px; }
